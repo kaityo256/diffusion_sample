@@ -1,0 +1,4 @@
+*.dump
+diffusion.input 
+diffusion.atoms
+log.lammps
