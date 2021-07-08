@@ -1,8 +1,9 @@
 import re
 import numpy as np
 
-L = 20
-N = (L//2)**3*4
+L = 20           # システムサイズ
+N = (L//2)**3*4  # 原子数
+dt = 0.001       # 時間刻み
 
 
 def read_position(f):
@@ -67,5 +68,5 @@ for t in range(time-1):
         dy = y[t][i] - y[0][i]
         dz = z[t][i] - z[0][i]
         r2 += dx**2 + dy**2 + dz**2
-    r2 /= N
-    print(f"{t} {r2}")
+    r2 = r2/N
+    print(f"{t*dt} {r2}")
