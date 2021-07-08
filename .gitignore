@@ -3,3 +3,5 @@
 log.lammps
 diffusion.dat
 diffusion.png
+trajectory.dat
+trajectory.png
