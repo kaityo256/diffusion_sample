@@ -7,7 +7,9 @@ dt = 0.001       # 時間刻み
 
 
 def read_position(f):
-    n = 0
+    """
+    あるタイムステップにおける、原子の座標をまとめて読み込む
+    """
     line = f.readline()
     qx = np.zeros(N)
     qy = np.zeros(N)
@@ -26,6 +28,10 @@ def read_position(f):
 
 
 def read_file(filename):
+    """
+    LAMMPSのダンプファイルから、全時刻の全原子の座標を読み込む
+    tステップ目のi番目の原子のx座標は x[t][i] で与えられる
+    """
     x = []
     y = []
     z = []
