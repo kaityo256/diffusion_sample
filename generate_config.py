@@ -3,7 +3,7 @@ import numpy as np
 from math import cos, sin, pi, sqrt
 
 L = 10
-N = L**3*4
+N = (L//2)**3*4
 
 
 def add_atom(qx, qy, qz, x, y, z):
@@ -23,23 +23,27 @@ def makeconf():
     py = []
     pz = []
     # FCCに組む(密度0.5)
-    h = 0.5
-    for ix in range(L):
-        for iy in range(L):
-            for iz in range(L):
+    h = 1.0
+    for x in range(L//2):
+        for y in range(L//2):
+            for z in range(L//2):
+                ix = x * 2
+                iy = y * 2
+                iz = z * 2
                 add_atom(qx, qy, qz, ix, iy, iz)
                 add_atom(qx, qy, qz, ix, iy+h, iz+h)
                 add_atom(qx, qy, qz, ix+h, iy, iz+h)
                 add_atom(qx, qy, qz, ix+h, iy+h, iz)
     # ランダムな向きに大きさ1の初速を与える
+    v0 = 2.0
     for _ in range(N):
         phi = random.uniform(0, 2*pi)
         vz = random.uniform(-1, 1)
         vx = sqrt(1-vz**2)*cos(phi)
         vy = sqrt(1-vz**2)*sin(phi)
-        px.append(vx)
-        py.append(vy)
-        pz.append(vz)
+        px.append(v0*vx)
+        py.append(v0*vy)
+        pz.append(v0*vz)
     # 全体がドリフトしないように平均速度をゼロにする
     px = np.array(px)
     py = np.array(py)
