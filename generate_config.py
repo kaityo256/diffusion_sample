@@ -2,7 +2,7 @@ import random
 import numpy as np
 from math import cos, sin, pi, sqrt
 
-L = 10
+L = 20
 N = (L//2)**3*4
 
 
