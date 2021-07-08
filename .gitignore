@@ -1,3 +1,5 @@
 *.lammpstrj
 *.atoms
 log.lammps
+diffusion.dat
+diffusion.png

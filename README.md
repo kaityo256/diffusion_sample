@@ -33,3 +33,8 @@ gnuplot diffusion.plt
 
 すると、以下のような図が出力され、たしかに拡散していることがわかる。
 
+![fig](fig/diffusion.png)
+
+## LICENSE
+
+MIT
