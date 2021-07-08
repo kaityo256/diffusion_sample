@@ -13,18 +13,18 @@ def read_position(f):
     qy = np.zeros(N)
     qz = np.zeros(N)
     while line:
+        # 次のフレームの最初の行が出てきたら読み込み終了
         if re.compile("ITEM: TIMESTEP").search(line):
             return qx, qy, qz
         a = line.split()
-        i = int(a[0])-1
-        qx[i] = float(a[2])*L
-        qy[i] = float(a[3])*L
-        qz[i] = float(a[4])*L
+        i = int(a[0])-1         # 粒子番号
+        qx[i] = float(a[2])*L   # x座標
+        qy[i] = float(a[3])*L   # y座標
+        qz[i] = float(a[4])*L   # z座標
         line = f.readline()
     return [], [], []
 
 
-pos = []
 x = []
 y = []
 z = []
