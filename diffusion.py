@@ -1,8 +1,9 @@
 import re
+
 import numpy as np
 
 L = 20           # システムサイズ
-N = (L//2)**3*4  # 原子数
+N = (L // 2)**3 * 4  # 原子数
 dt = 0.001       # 時間刻み
 
 
@@ -19,12 +20,12 @@ def read_position(f):
         if re.compile("ITEM: TIMESTEP").search(line):
             return qx, qy, qz
         a = line.split()
-        i = int(a[0])-1         # 粒子番号
-        qx[i] = float(a[2])*L   # x座標
-        qy[i] = float(a[3])*L   # y座標
-        qz[i] = float(a[4])*L   # z座標
+        i = int(a[0]) - 1         # 粒子番号
+        qx[i] = float(a[2]) * L   # x座標
+        qy[i] = float(a[3]) * L   # y座標
+        qz[i] = float(a[4]) * L   # z座標
         line = f.readline()
-    return [], [], []
+    return qx, qy, qz
 
 
 def read_file(filename):
@@ -55,20 +56,21 @@ def adjust_periodic(x, y, z):
     時刻tと時刻t+1の座標を比較し、急激な変化がおきていたら修正
     """
     time = len(x)
+    N = 1
     for i in range(N):
-        for t in range(time-1):
-            if x[t+1][i] - x[t][i] > L/2:
-                x[t+1][i] -= L
-            if y[t+1][i] - y[t][i] > L/2:
-                y[t+1][i] -= L
-            if z[t+1][i] - z[t][i] > L/2:
-                z[t+1][i] -= L
-            if x[t+1][i] - x[t][i] < -L/2:
-                x[t+1][i] += L
-            if y[t+1][i] - y[t][i] < -L/2:
-                y[t+1][i] += L
-            if z[t+1][i] - z[t][i] < -L/2:
-                z[t+1][i] += L
+        for t in range(time - 1):
+            if x[t + 1][i] - x[t][i] > L / 2:
+                x[t + 1][i] -= ((x[t + 1][i] - x[t][i] + L / 2) // L) * L
+            if y[t + 1][i] - y[t][i] > L / 2:
+                y[t + 1][i] -= ((y[t + 1][i] - y[t][i] + L / 2) // L) * L
+            if z[t + 1][i] - z[t][i] > L / 2:
+                z[t + 1][i] -= ((z[t + 1][i] - z[t][i] + L / 2) // L) * L
+            if x[t + 1][i] - x[t][i] < -L / 2:
+                x[t + 1][i] += ((x[t][i] - x[t + 1][i] + L / 2) // L) * L
+            if y[t + 1][i] - y[t][i] < -L / 2:
+                y[t + 1][i] += ((y[t][i] - y[t + 1][i] + L / 2) // L) * L
+            if z[t + 1][i] - z[t][i] < -L / 2:
+                z[t + 1][i] += ((z[t][i] - z[t + 1][i] + L / 2) // L) * L
 
 
 def save_diffusion(x, y, z):
@@ -76,15 +78,16 @@ def save_diffusion(x, y, z):
     平均自乗変位の計算
     時刻t=0と、時刻tの距離の差の自乗を時間の関数としてプロット
     """
+    N = 1
     with open("diffusion.dat", "w") as f:
-        for t in range(len(x)-1):
+        for t in range(len(x) - 1):
             r2 = 0.0
             for i in range(N):
                 dx = x[t][i] - x[0][i]
                 dy = y[t][i] - y[0][i]
                 dz = z[t][i] - z[0][i]
                 r2 += dx**2 + dy**2 + dz**2
-            r2 = r2/N
+            r2 = r2 / N
             f.write(f"{t*dt} {r2}\n")
     print("Generated diffusion.dat")
 
